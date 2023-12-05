@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service-deployment
+spec:
+  replicas: 1  # Adjust the number of replicas as needed
+  selector:
+    matchLabels:
+      app: order-service
+  template:
+    metadata:
+      labels:
+        app: order-service
+    spec:
+      containers:
+      - name: order-service
+        image: order-service
+        ports:
+        - containerPort: 5000
+        command: ["npm", "run", "dev"]
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service-service
+spec:
+  selector:
+    app: order-service
+  ports:
+    - protocol: TCP
+      port: 80  # Expose the service on port 80
+      targetPort: 5000
+  type: LoadBalancer  # Use 'LoadBalancer' for cloud environments, or 'NodePort' for local testing
+

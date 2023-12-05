@@ -1,0 +1,48 @@
+# my-app.yaml
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-java-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-java-app
+  template:
+    metadata:
+      labels:
+        app: my-java-app
+    spec:
+      containers:
+        - name: my-java-app-container
+          image: lalithma/java:demo 
+          ports:
+            - containerPort: 8080
+            - containerPort: 4317
+            - containerPort: 4318 
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-java-app-service
+spec:
+  selector:
+    app: my-java-app
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      name: http
+    - protocol: TCP
+      port: 4317
+      targetPort: 4317
+      name: otel-traces
+    - protocol: TCP
+      port: 4318
+      targetPort: 4318
+      name: otel-metrics
+  type: LoadBalancer # Change this line to LoadBalancer
+

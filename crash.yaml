@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crashloop-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crashloop
+  template:
+    metadata:
+      labels:
+        app: crashloop
+    spec:
+      containers:
+      - name: my-app
+        image: ubuntu:20.04  # Use the Ubuntu version you need
+        command: ["/bin/sh", "-c"]
+        args:
+        - "while true; do echo 'Simulating a crash'; sleep 2; exit 1; done"
+
